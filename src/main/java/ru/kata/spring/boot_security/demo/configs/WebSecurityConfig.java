@@ -14,11 +14,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
+    private final SuccessUserHandler successUserHandler;
 
     @Autowired
-    public WebSecurityConfig(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
+    public WebSecurityConfig(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder, SuccessUserHandler successUserHandler) {
         this.userDetailsService = userDetailsService;
         this.passwordEncoder = passwordEncoder;
+        this.successUserHandler = successUserHandler;
     }
 
     @Override
@@ -30,7 +32,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
-                .httpBasic();
+                .formLogin().successHandler(successUserHandler)
+                .and()
+                .logout()
+                .logoutSuccessUrl("/");
     }
 
 

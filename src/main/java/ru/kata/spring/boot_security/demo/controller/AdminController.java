@@ -2,6 +2,7 @@ package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
@@ -15,6 +16,13 @@ public class AdminController {
     @Autowired
     public AdminController(UserService userService) {
         this.userService = userService;
+    }
+
+    @GetMapping("/users")
+    public ModelAndView getPage() {
+        var modelAndView = new ModelAndView();
+        modelAndView.setViewName("users.html");
+        return modelAndView;
     }
 
     @GetMapping
