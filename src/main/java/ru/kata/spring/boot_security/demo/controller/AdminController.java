@@ -3,6 +3,8 @@ package ru.kata.spring.boot_security.demo.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import ru.kata.spring.boot_security.demo.model.Gender;
+import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
@@ -36,12 +38,22 @@ public class AdminController {
     }
 
     @PatchMapping("/{id}")
-    public void update(@RequestBody User user) {
+    public void update(@ModelAttribute User user) {
         userService.update(user);
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") Long id) {
         userService.delete(id);
+    }
+
+    @GetMapping("/getPossibleGenders")
+    public List<Gender> getPossibleGenders() {
+        return List.of(Gender.values());
+    }
+
+    @GetMapping("/getPossibleRoles")
+    public List<Role> getPossibleRoles() {
+        return List.of(Role.values());
     }
 }

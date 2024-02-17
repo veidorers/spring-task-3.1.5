@@ -62,59 +62,10 @@ function populateAdminPage() {
                 // You can add edit and delete buttons if needed
                 const editCell = row.insertCell();
                 const deleteCell = row.insertCell();
-                editCell.innerHTML = '<button>Edit</button>';
-                deleteCell.innerHTML =
-                    `<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal-${user.name}">Delete</button>
-                    <div class="modal fade" id="exampleModal-${user.name}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel">Delete user</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body d-flex justify-content-center text-center">
-                                                <form>
-                                                    <fieldset disabled>
-                                                        <div class="mb-3">
-                                                            <label style="font-weight: bold" for="id" class="form-label">ID</label>
-                                                            <input type="number" id="id" class="form-control" placeholder="${user.id}">
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <label style="font-weight: bold" for="name" class="form-label">Name</label>
-                                                            <input type="text" id="name" class="form-control" placeholder="${user.name}">
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <label style="font-weight: bold" for="age" class="form-label">Age</label>
-                                                            <input type="number" id="age" class="form-control" placeholder="${user.age}">
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <label style="font-weight: bold" for="gender" class="form-label">Gender</label>
-                                                            <select id="gender" class="form-select">
-                                                                <option>${user.gender}</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <label style="font-weight: bold" for="roles-${user.id}" class="form-label">Roles</label>
-                                                            <select multiple="multiple" id="roles-${user.id}" class="form-select"></select>
-                                                        </div>
-                                                    </fieldset>
-                                                </form>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                <button type="submit" class="btn btn-danger" onclick="deleteUser(${user.id})">Delete</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-`;
-                let rolesSelect = document.getElementById(`roles-${user.id}`);
-                user.roles.forEach(role => {
-                        let option = document.createElement('option');
-                        option.text = role;
-                        rolesSelect.add(option);
-                    }
-                )
+                // editCell.innerHTML = `<button>Edit</button>`;
+                createEditButtonAndModal(editCell, user);
+                createDeleteButtonAndModal(deleteCell, user);
+
             });
         })
         .catch(error => {
@@ -155,6 +106,144 @@ function switchToUserPanel() {
 function deleteUser(userId) {
     fetch(`http://localhost:8080/admin/${userId}`, {
         method: 'DELETE'
-    });
-    location.reload();
+    }).then(response => location.reload());
+}
+
+function createDeleteButtonAndModal(deleteCell, user) {
+    deleteCell.innerHTML =
+        `<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal-${user.id}">Delete</button>
+            <div class="modal fade" id="exampleModal-${user.id}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Delete user</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body d-flex justify-content-center text-center">
+                            <form method="post">
+                                <fieldset disabled>
+                                    <div class="mb-3">
+                                        <label style="font-weight: bold" for="id" class="form-label">ID</label>
+                                        <input type="number" id="id" class="form-control" placeholder="${user.id}">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label style="font-weight: bold" for="name" class="form-label">Name</label>
+                                        <input type="text" id="name" class="form-control" placeholder="${user.name}">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label style="font-weight: bold" for="age" class="form-label">Age</label>
+                                        <input type="number" id="age" class="form-control" placeholder="${user.age}">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label style="font-weight: bold" for="gender" class="form-label">Gender</label>
+                                        <select id="gender" class="form-select">
+                                            <option>${user.gender}</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label style="font-weight: bold" for="roles-${user.id}" class="form-label">Roles</label>
+                                        <select multiple="multiple" id="roles-${user.id}" class="form-select"></select>
+                                    </div>
+                                </fieldset>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-danger" onclick="deleteUser(${user.id})">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+`;
+    let rolesSelect = document.getElementById(`roles-${user.id}`);
+    user.roles.forEach(role => {
+            let option = document.createElement('option');
+            option.text = role;
+            rolesSelect.add(option);
+        }
+    )
+}
+
+function createEditButtonAndModal(editCell, user) {
+    editCell.innerHTML =
+        `<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal-${user.id}">Edit</button>
+         <div class="modal fade" id="editModal-${user.id}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editModalLabel">Edit user</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body d-flex justify-content-center text-center">
+                        <form id="edit_form-${user.id}">
+                            <input class="form-control" type="hidden" name="id" id="edit_id" value="${user.id}">
+
+                            <label style="font-weight: bold" class="form-label" for="edit_name">Name</label>
+                            <input class="form-control" type="text" name="name" id="edit_name" value="${user.name}"/><br/>
+
+                            <label style="font-weight: bold" class="form-label" for="edit_password">Password</label>
+                            <input class="form-control" type="password" name="password" id="edit_password"/><br/>
+
+                            <label style="font-weight: bold" class="form-label" for="edit_age">Age</label>
+                            <input class="form-control" type="text" name="age" id="edit_age" value="${user.age}"/><br/>
+                            
+                            <label style="font-weight: bold" class="form-label" for="edit_gender-${user.id}">Gender</label>
+                            <select class="form-control" name="gender" id="edit_gender-${user.id}"></select> <br/>
+                            
+                            <label style="font-weight: bold" for="edit_roles-${user.id}" class="form-label">Roles</label>
+                            <select class="form-control" multiple="multiple" name="roles" id="edit_roles-${user.id}"></select> <br/>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" onclick="submitEditForm(${user.id})">Edit</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+`;
+
+    fetch('http://localhost:8080/admin/getPossibleGenders')
+        .then(response => response.json())
+        .then(gendersList => {
+            let genderSelect = document.getElementById(`edit_gender-${user.id}`);
+
+            gendersList.forEach(function(gender) {
+                let option = document.createElement("option");
+                option.value = gender;
+                option.text = gender;
+                if (gender === user.gender) {
+                    option.selected = true;
+                }
+                genderSelect.add(option);
+            });
+        })
+
+    fetch('http://localhost:8080/admin/getPossibleRoles')
+        .then(response => response.json())
+        .then(rolesList => {
+            let rolesSelect = document.getElementById(`edit_roles-${user.id}`);
+
+            rolesList.forEach(function(role) {
+                let option = document.createElement("option");
+                option.value = role;
+                option.text = role;
+                if (user.roles.includes(role)) {
+                    option.selected = true;
+                }
+                rolesSelect.add(option);
+            });
+        })
+
+
+}
+
+function submitEditForm(userId) {
+    const form = document.getElementById(`edit_form-${userId}`);
+    const formData = new FormData(form);
+
+    fetch(`http://localhost:8080/admin/${userId}`, {
+        method: 'PATCH',
+        body: formData
+    }).then(response => location.reload());
 }
