@@ -28,7 +28,7 @@
         <div class="col-md-2 sidebar">
             <div class="nav flex-column">
                 <a class="nav-link" href="#" id="adminPanelLink" onclick="switchToAdminPanel()">Admin</a>
-                <a class="nav-link" href="#" id="userPanelLink" onclick="switchToUserPanel()">User</a>
+                <a class="nav-link" href="#" id="userPageLink" onclick="switchToUserPage()">User</a>
             </div>
         </div>
 
@@ -36,28 +36,63 @@
         <div class="col-md-10 main-content">
             <div class="container" id="adminPanel">
                 <h1>Admin panel</h1>
-                <div class="card border">
-                    <h5 class="card-header">All users</h5>
-                    <div class="card-body">
-                        <table id="adminTable" class="table table-striped table-borderless">
-                            <tbody>
-                            <tr/>
-                            <tr class="border-top">
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Age</th>
-                                <th>Gender</th>
-                                <th>Roles</th>
-                                <th>Edit</th>
-                                <th>Delete</th>
-                            </tr>
-                            </tbody>
-                        </table>
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link" id="usersTableLink" href="#" onclick="switchToUsersTable()">Users table</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="createUserLink" href="#" onclick="switchToCreateUserPanel()">New user</a>
+                    </li>
+                </ul>
+                <div id="usersTable">
+                    <div class="card border">
+                        <h5 class="card-header">All users</h5>
+                        <div class="card-body">
+                            <table id="adminTable" class="table table-striped table-borderless">
+                                <tbody>
+                                <tr/>
+                                <tr class="border-top">
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Age</th>
+                                    <th>Gender</th>
+                                    <th>Roles</th>
+                                    <th>Edit</th>
+                                    <th>Delete</th>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div id="createUserPanel">
+                    <div class="card border" style="background-color: white">
+                        <h5 class="card-header">Add new user</h5>
+                        <div class="d-flex justify-content-center text-center">
+                            <form id="createUserForm">
+                                <label style="font-weight: bold" for="create_name" class="form-label">Name:</label>
+                                <input class="form-control" type="text" name="name" id="create_name"/> <br/>
+
+                                <label style="font-weight: bold" for="create_password" class="form-label">Password:</label>
+                                <input class="form-control" type="password" name="password" id="create_password"/> <br/>
+
+                                <label style="font-weight: bold" for="create_age" class="form-label">Age:</label>
+                                <input class="form-control" type="number" name="age" id="create_age"/> <br/>
+
+                                <label style="font-weight: bold" for="create_gender" class="form-label">Gender:</label>
+                                <select class="form-control" name="gender" id="create_gender"></select> <br/>
+
+                                <label style="font-weight: bold" for="create_roles" class="form-label">Roles:</label>
+                                <select class="form-control" multiple="multiple" name="roles" id="create_roles"></select> <br/>
+
+                                <button type="button" class="btn btn-primary" onclick="createUser()">Add</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="container" id="userPanel">
+            <div class="container" id="userPage">
                 <h1>User information-page</h1>
                 <div class="card border">
                     <h5 class="card-header">About user</h5>

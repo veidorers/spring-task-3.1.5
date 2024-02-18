@@ -5,11 +5,13 @@ const currentUserRoles = document.getElementById('currentUserRoles');
 
 populateAll();
 switchToAdminPanel();
+switchToUsersTable();
 
 function populateAll() {
     populateNavbar();
     populateUserPage();
-    populateAdminPage()
+    populateAdminUsersPage()
+    populateAdminNewUserPage();
 }
 
 function populateNavbar() {
@@ -43,7 +45,7 @@ function populateUserPage() {
         })
 }
 
-function populateAdminPage() {
+function populateAdminUsersPage() {
     const adminTable = document.getElementById('adminTable');
     fetch('http://localhost:8080/admin')
         .then(response => response.json()) // Parse JSON response
@@ -73,26 +75,54 @@ function populateAdminPage() {
         });
 }
 
+function populateAdminNewUserPage() {
+    fetch('http://localhost:8080/admin/getPossibleGenders')
+        .then(response => response.json())
+        .then(gendersList => {
+            let genderSelect = document.getElementById('create_gender');
+
+            gendersList.forEach(function(gender) {
+                let option = document.createElement("option");
+                option.value = gender;
+                option.text = gender;
+                genderSelect.add(option);
+            });
+        })
+
+    fetch('http://localhost:8080/admin/getPossibleRoles')
+        .then(response => response.json())
+        .then(rolesList => {
+            let rolesSelect = document.getElementById('create_roles');
+
+            rolesList.forEach(function(role) {
+                let option = document.createElement("option");
+                option.value = role;
+                option.text = role;
+                rolesSelect.add(option);
+            });
+        })
+}
+
 
 function switchToAdminPanel() {
     document.getElementById('adminPanel').style.display = 'block';
-    document.getElementById('userPanel').style.display = 'none';
+    document.getElementById('userPage').style.display = 'none';
 
     let adminPanelLink = document.getElementById('adminPanelLink');
     adminPanelLink.classList.add('active-sidebar-link');
     adminPanelLink.classList.remove('inactive-sidebar-link');
 
-    let userPanelLink = document.getElementById('userPanelLink');
+    let userPanelLink = document.getElementById('userPageLink');
     userPanelLink.classList.add('inactive-sidebar-link');
     userPanelLink.classList.remove('active-sidebar-link');
 }
 
 
-function switchToUserPanel() {
+function switchToUserPage() {
     document.getElementById('adminPanel').style.display = 'none';
-    document.getElementById('userPanel').style.display = 'block';
+    document.getElementById('userPage').style.display = 'block';
 
-    let userPanelLink = document.getElementById('userPanelLink');
+    let userPanelLink = document.getElementById('userPageLink');
     userPanelLink.classList.add('active-sidebar-link');
     userPanelLink.classList.remove('inactive-sidebar-link');
 
@@ -246,4 +276,47 @@ function submitEditForm(userId) {
         method: 'PATCH',
         body: formData
     }).then(response => location.reload());
+}
+
+function switchToUsersTable() {
+    document.getElementById('usersTable').style.display = 'block';
+    document.getElementById('createUserPanel').style.display = 'none';
+
+    let usersTableLink = document.getElementById('usersTableLink');
+    let createUserLink = document.getElementById('createUserLink');
+
+    usersTableLink.classList.add('active');
+    usersTableLink.setAttribute('aria-current', 'true');
+    usersTableLink.style.color = 'gray';
+
+    createUserLink.classList.remove('active');
+    createUserLink.setAttribute('aria-current', 'false');
+    createUserLink.style.color = '';
+}
+
+function switchToCreateUserPanel() {
+    document.getElementById('createUserPanel').style.display = 'block';
+    document.getElementById('usersTable').style.display = 'none';
+
+    let usersTableLink = document.getElementById('usersTableLink');
+    let createUserLink = document.getElementById('createUserLink');
+
+    createUserLink.classList.add('active');
+    createUserLink.setAttribute('aria-current', 'true');
+    createUserLink.style.color = 'gray';
+
+    usersTableLink.classList.remove('active');
+    usersTableLink.setAttribute('aria-current', 'false');
+    usersTableLink.style.color = '';
+}
+
+
+function createUser() {
+    const form = document.getElementById('createUserForm');
+    const formData = new FormData(form);
+
+    fetch('http://localhost:8080/admin', {
+        method: 'POST',
+        body: formData
+    }).then(response => location.reload())
 }

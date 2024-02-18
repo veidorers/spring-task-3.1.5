@@ -33,7 +33,7 @@ public class AdminController {
     }
 
     @PostMapping
-    public void add(@RequestBody User user) {
+    public void add(@ModelAttribute User user) {
         userService.save(user);
     }
 
