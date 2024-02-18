@@ -10,6 +10,6 @@ function populateUserPage() {
             row.insertCell().textContent = currentUser.name;
             row.insertCell().textContent = currentUser.age;
             row.insertCell().textContent = currentUser.gender;
-            row.insertCell().textContent = currentUser.roles.join(', ');
+            row.insertCell().textContent = currentUser.roles.map(role => role.substring(5)).join(', ');
         })
 }

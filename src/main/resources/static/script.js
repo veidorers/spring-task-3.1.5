@@ -21,7 +21,7 @@ function populateNavbar() {
             if (currentUser && currentUser.username && currentUser.roles) {
                 console.log(currentUser);
                 currentUserName.textContent = currentUser.username;
-                currentUserRoles.textContent = " with roles - " + currentUser.roles;
+                currentUserRoles.textContent = " with roles: " + currentUser.roles.map(role => role.substring(5)).join(', ');
             } else {
                 currentUserName.textContent = 'Error: Username not found';
             }
@@ -41,7 +41,7 @@ function populateUserPage() {
             row.insertCell().textContent = currentUser.name;
             row.insertCell().textContent = currentUser.age;
             row.insertCell().textContent = currentUser.gender;
-            row.insertCell().textContent = currentUser.roles.join(', '); // Assuming roles is an array
+            row.insertCell().textContent = currentUser.roles.map(role => role.substring(5)).join(', ');
         })
 }
 
@@ -59,7 +59,7 @@ function populateAdminUsersPage() {
                 row.insertCell().textContent = user.name;
                 row.insertCell().textContent = user.age;
                 row.insertCell().textContent = user.gender;
-                row.insertCell().textContent = user.roles.join(', '); // Assuming roles is an array
+                row.insertCell().textContent = user.roles.map(role => role.substring(5)).join(', ');
 
                 // You can add edit and delete buttons if needed
                 const editCell = row.insertCell();
@@ -97,7 +97,7 @@ function populateAdminNewUserPage() {
             rolesList.forEach(function(role) {
                 let option = document.createElement("option");
                 option.value = role;
-                option.text = role;
+                option.text = role.substring(5);
                 rolesSelect.add(option);
             });
         })
@@ -188,7 +188,7 @@ function createDeleteButtonAndModal(deleteCell, user) {
     let rolesSelect = document.getElementById(`roles-${user.id}`);
     user.roles.forEach(role => {
             let option = document.createElement('option');
-            option.text = role;
+            option.text = role.substring(5);
             rolesSelect.add(option);
         }
     )
@@ -257,7 +257,7 @@ function createEditButtonAndModal(editCell, user) {
             rolesList.forEach(function(role) {
                 let option = document.createElement("option");
                 option.value = role;
-                option.text = role;
+                option.text = role.substring(5);
                 if (user.roles.includes(role)) {
                     option.selected = true;
                 }
