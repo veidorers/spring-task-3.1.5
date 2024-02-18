@@ -15,7 +15,7 @@ function populateAll() {
 }
 
 function populateNavbar() {
-    fetch('http://localhost:8080/user')
+    fetch('http://localhost:8080/currentUser')
         .then(response => response.json()) // Parse JSON response
         .then(currentUser => {
             if (currentUser && currentUser.username && currentUser.roles) {
@@ -34,7 +34,7 @@ function populateNavbar() {
 function populateUserPage() {
     const userTable = document.getElementById('userTable')
     const row = userTable.insertRow();
-    fetch('http://localhost:8080/user')
+    fetch('http://localhost:8080/currentUser')
         .then(response => response.json())
         .then(currentUser => {
             row.insertCell().textContent = currentUser.id;
